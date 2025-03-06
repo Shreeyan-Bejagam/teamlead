@@ -12,14 +12,17 @@ const Login = () => {
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
+    // ✅ Use environment variable (works locally & on Netlify)
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log("🔍 Sending Request:", values);
-            const response = await axios.post("http://localhost:3002/employee/teamleadlogin", values);
-    
+            console.log("🔍 Sending Request to:", `${backendUrl}/employee/teamleadlogin`);
+            const response = await axios.post(`${backendUrl}/employee/teamleadlogin`, values);
+
             console.log("✅ Server Response:", response.data);
-    
+
             if (response.data.loginStatus) {
                 localStorage.setItem("teamLeadId", response.data.id);  // ✅ Store TeamLead ID
                 navigate("/dashboard"); // ✅ Redirect to Dashboard
@@ -31,7 +34,6 @@ const Login = () => {
             setError("Login failed. Please check your credentials.");
         }
     };
-    
 
     return (
         <div className='d-flex justify-content-center align-items-center vh-100 loginPage'>
