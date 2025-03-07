@@ -37,14 +37,23 @@ const Dashboard = () => {
 
   // ✅ Fetch Notifications (Specific to this TeamLead using receiver_id)
   const fetchNotifications = () => {
-    axios.get(`${backendUrl}/auth/notifications/user/${userId}`)
+    console.log(`🔔 Fetching notifications for TeamLead ID: ${userId}`); // ✅ Debug Log
+    axios.get(`${backendUrl}/auth/notifications/user/${userId}`, {
+      withCredentials: true
+    })
       .then((response) => {
         if (response.data.Status) {
+          console.log("✅ Notifications Fetched:", response.data.Result);
           setNotifications(response.data.Result);
+        } else {
+          console.warn("⚠️ No notifications found for TeamLead");
         }
       })
-      .catch((err) => console.error("❌ Error fetching notifications:", err));
+      .catch((err) => {
+        console.error("❌ Error fetching notifications:", err);
+      });
   };
+
 
 
   // ✅ Handle Logout
