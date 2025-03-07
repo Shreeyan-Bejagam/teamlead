@@ -19,7 +19,7 @@ const TeamLeadIndentForm = () => {
         issue_gst_exemption_certificate: "",
         item_details: [],
         justification_of_procurement: "",  // TeamLead's mandatory field
-        
+
     });
 
     useEffect(() => {
@@ -41,13 +41,13 @@ const TeamLeadIndentForm = () => {
                 alert("Error loading indent");
             });
     }, [indentId, navigate]);
-    
+
     const handleSubmit = () => {
         if (!formData.justification_of_procurement.trim()) {
             alert("Justification of Procurement is mandatory.");
             return;
         }
-    
+
         axios.post(`${backendUrl}/auth/teamlead_update_indent`, {
             ...formData,
             indent_id: indentId
@@ -58,8 +58,15 @@ const TeamLeadIndentForm = () => {
             console.error("Submit Error:", err);
             alert("Failed to submit indent.");
         });
-    };    
-    
+    };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
 
     return (
         <div className="container mt-4">
@@ -112,7 +119,7 @@ const TeamLeadIndentForm = () => {
                         required
                     />
 
-                    
+
                     {/* Procurement TL Section - Checklist */}
                     <h4>For Office of Stores and Purchase only</h4>
                     <table className="table table-bordered">
@@ -160,7 +167,7 @@ const TeamLeadIndentForm = () => {
                                 { label: "Expert 1 (Senior Employee/Nominated by Competent Authority)", value: formData.pfc_expert1 },
                                 { label: "Expert 2 (Honorary Member/Nominated by Competent Authority)", value: formData.pfc_expert2 },
                                 { label: "One Member from Finance Team (Nominated by Competent Authority)", value: formData.pfc_finance_member }
-                                
+
                             ].map((row, idx) => (
                                 <tr key={idx}><td>{row.label}</td><td>{row.value || "______________________"}</td></tr>
                             ))}
@@ -168,26 +175,26 @@ const TeamLeadIndentForm = () => {
                     </table>
                     <p className="text-end"><b>(Signature of Competent Authority)</b></p>
 
-<h5 className="mt-4 text-center">Approval Section</h5>
-<table className="table table-bordered">
-    <tbody>
-        <tr>
-            <td><b>PI</b><br />(Up to Rs. 5 Lakh)<br /><small>Note: Non-Recurring: Rs. 50,000<br />Recurring: Rs. 5,00,000 (For Project Purchase)</small></td>
-            <td><b>PROJECT DIRECTOR/CEO</b><br />(Up to Rs. 50 Lac)</td>
-            <td><b>CHAIRMAN</b><br />(Full Power)</td>
-        </tr>
-    </tbody>
-</table>
+                    <h5 className="mt-4 text-center">Approval Section</h5>
+                    <table className="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td><b>PI</b><br />(Up to Rs. 5 Lakh)<br /><small>Note: Non-Recurring: Rs. 50,000<br />Recurring: Rs. 5,00,000 (For Project Purchase)</small></td>
+                                <td><b>PROJECT DIRECTOR/CEO</b><br />(Up to Rs. 50 Lac)</td>
+                                <td><b>CHAIRMAN</b><br />(Full Power)</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-<h4>For Office of Accounts only</h4>
-<table className="table table-bordered">
-    <tbody>
-        {["Budget allocation of the Office/Project", "Budget utilized", "Available balance", "Are funds available in the budget head requested by the Project/Office?", "Comments (if any)"].map((label, idx) => (
-            <tr key={idx}><td>{label}</td><td>______________________</td></tr>
-        ))}
-    </tbody>
-</table>
-<p className="text-end"><b>Officer-in-Charge (Accounts)</b></p>
+                    <h4>For Office of Accounts only</h4>
+                    <table className="table table-bordered">
+                        <tbody>
+                            {["Budget allocation of the Office/Project", "Budget utilized", "Available balance", "Are funds available in the budget head requested by the Project/Office?", "Comments (if any)"].map((label, idx) => (
+                                <tr key={idx}><td>{label}</td><td>______________________</td></tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <p className="text-end"><b>Officer-in-Charge (Accounts)</b></p>
 
                     <div className="mt-4 d-flex justify-content-between">
                         <button className="btn btn-secondary" onClick={() => setStep(1)}>Back</button>
