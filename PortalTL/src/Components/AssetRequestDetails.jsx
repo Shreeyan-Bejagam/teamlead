@@ -9,7 +9,7 @@ const AssetRequestDetails = () => {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    axios.get(`http://localhost:3002/auth/asset_requests/details/${id}`)
+    axios.get(`${backendUrl}/auth/asset_requests/details/${id}`)
       .then((response) => {
         if (response.data.Status) {
           setRequestDetails(response.data.Result);
@@ -19,19 +19,20 @@ const AssetRequestDetails = () => {
   }, [id]);
 
   const handleDecision = (decision) => {
-    axios.put(`http://localhost:3002/auth/approve_reject_asset/${id}`, {
+    axios.put(`${backendUrl}/auth/approve_reject_asset/${id}`, {
       status: decision,
       comment,
       requested_by: requestDetails.requested_by,
     })
-    .then((response) => {
-      if (response.data.Status) {
-        alert(`Request ${decision} successfully!`);
-        navigate("/dashboard/asset-requests"); // Redirect after decision
-      }
-    })
-    .catch((err) => console.error(`❌ Error ${decision} request:`, err));
+      .then((response) => {
+        if (response.data.Status) {
+          alert(`Request ${decision} successfully!`);
+          navigate("/dashboard/asset-requests"); // Redirect after decision
+        }
+      })
+      .catch((err) => console.error(`❌ Error ${decision} request:`, err));
   };
+
 
   if (!requestDetails) return <p>Loading request details...</p>;
 
@@ -45,10 +46,10 @@ const AssetRequestDetails = () => {
         <p><strong>Status:</strong> {requestDetails.status}</p>
 
         {/* 🔹 Comment Box */}
-        <textarea 
-          className="form-control mt-2" 
-          placeholder="Add comment (optional)" 
-          value={comment} 
+        <textarea
+          className="form-control mt-2"
+          placeholder="Add comment (optional)"
+          value={comment}
           onChange={(e) => setComment(e.target.value)}
         ></textarea>
 

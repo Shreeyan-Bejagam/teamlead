@@ -15,20 +15,22 @@ const Assets = () => {
     liable_person: "",
     serial_number: "",
   });
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 
   const fetchAssets = () => {
-    const token = localStorage.getItem("token"); // ✅ Get the token from storage
+    const token = localStorage.getItem("token");
 
     if (!token) {
-        console.error("❌ No token found in localStorage");
-        return;
+      console.error("❌ No token found in localStorage");
+      return;
     }
 
     const endpoint = type === "All" ? "/auth/assets" : `/auth/assets?type=${type}`;
 
     axios
-      .get(`http://localhost:3002${endpoint}`, {
-        headers: { Authorization: `Bearer ${token}` } // ✅ Attach token in headers
+      .get(`${backendUrl}${endpoint}`, {  // 🔥 Uses VITE_BACKEND_URL dynamically
+        headers: { Authorization: `Bearer ${token}` }
       })
       .then((response) => {
         if (response.data.Status) {
@@ -38,7 +40,8 @@ const Assets = () => {
         }
       })
       .catch((err) => console.error("❌ Error fetching assets:", err));
-};
+  };
+
 
 
 
@@ -56,7 +59,7 @@ const Assets = () => {
     }
 
     axios
-      .post("http://localhost:3002/auth/add_asset", newAsset)
+      .post(`${backendUrl}/auth/add_asset`, newAsset)
       .then((response) => {
         if (response.data.Status) {
           alert("Asset added successfully!");
@@ -75,14 +78,14 @@ const Assets = () => {
         }
       })
       .catch((err) => {
-        console.error("Error adding asset:", err);
-        alert("An unexpected error occurred.");
+        console.error("❌ Error adding asset:", err);
+        alert("Error adding asset!");
       });
   };
 
   const handleDeleteAsset = (id) => {
     axios
-      .delete(`http://localhost:3002/auth/delete_asset/${id}`)
+      .delete(`${backendUrl}/auth/delete_asset/${id}`)
       .then((response) => {
         if (response.data.Status) {
           alert("Asset deleted successfully!");
@@ -92,7 +95,7 @@ const Assets = () => {
         }
       })
       .catch((err) => console.error("Error deleting asset:", err));
-  };
+};
 
   return (
     <div className="container mt-3">
@@ -171,7 +174,7 @@ const Assets = () => {
                   </button>
                 </td>
               </tr>
-          ))}
+            ))}
         </tbody>
       </table>
     </div>

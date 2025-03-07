@@ -14,6 +14,7 @@ const Dashboard = () => {
 
   const userId = localStorage.getItem("teamLeadId");
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;;
 
   // ✅ Fetch TeamLead Profile & Notifications
   useEffect(() => {
@@ -23,7 +24,7 @@ const Dashboard = () => {
       return;
     }
 
-    axios.get(`http://localhost:3002/employee/detail/${userId}`, { withCredentials: true })
+    axios.get(`${backendUrl}/employee/detail/${userId}`, { withCredentials: true })
       .then((response) => {
         if (response.data.Status) {
           setTeamLead(response.data.Result);
@@ -36,7 +37,7 @@ const Dashboard = () => {
 
   // ✅ Fetch Notifications (Specific to this TeamLead using receiver_id)
   const fetchNotifications = () => {
-    axios.get(`http://localhost:3002/auth/notifications/user/${userId}`)
+    axios.get(`${backendUrl}/auth/notifications/user/${userId}`)
       .then((response) => {
         if (response.data.Status) {
           setNotifications(response.data.Result);
@@ -45,9 +46,10 @@ const Dashboard = () => {
       .catch((err) => console.error("❌ Error fetching notifications:", err));
   };
 
+
   // ✅ Handle Logout
   const handleLogout = () => {
-    axios.get("http://localhost:3002/employee/logout", { withCredentials: true })
+    axios.get(`${backendUrl}/employee/logout`, { withCredentials: true })
       .then((result) => {
         if (result.data.Status) {
           localStorage.removeItem("teamLeadId");
@@ -77,12 +79,15 @@ const Dashboard = () => {
             {teamLead ? (
               <div className="text-center mt-2">
                 <img
-                  src={teamLead.image ? `http://localhost:3000/images/${teamLead.image}` : "http://localhost:3000/images/default-profile.png"}
+                  src={teamLead.image
+                    ? `${backendUrl}/Images/${teamLead.image}`
+                    : `${backendUrl}/Images/default-profile.png`}
                   alt="TeamLead Profile"
                   className="rounded-circle"
                   style={{ width: "80px", height: "80px", objectFit: "cover", border: "2px solid white" }}
-                  onError={(e) => (e.target.src = "http://localhost:3000/images/default-profile.png")}
+                  onError={(e) => (e.target.src = `${backendUrl}/Images/default-profile.png`)}
                 />
+
                 <h5 className="mt-2">{teamLead.name}</h5>
                 <p className="text-white-50">{teamLead.email}</p>
                 <span className="badge bg-primary">Team Leader</span>

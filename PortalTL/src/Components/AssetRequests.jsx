@@ -7,6 +7,8 @@ const AssetRequests = () => {
   const [myAssets, setMyAssets] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState(null);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 
   useEffect(() => {
     fetchUserData();
@@ -15,38 +17,41 @@ const AssetRequests = () => {
 
   const fetchUserData = () => {
     const teamLeadId = localStorage.getItem("teamLeadId");
+
     axios
-      .get(`http://localhost:3002/employee/detail/${teamLeadId}`)
+      .get(`${backendUrl}/employee/detail/${teamLeadId}`)
       .then((response) => {
         setUser(response.data);
       })
       .catch((err) => console.error("❌ Error fetching user data:", err));
   };
 
+
   const fetchAssets = () => {
     const token = localStorage.getItem("token"); // 🔹 Fetch stored token
-  
+
     if (!token) {
       console.error("❌ No token found! Redirecting to login...");
       return;
     }
-  
-    axios.get("http://localhost:3002/auth/assets", {
+
+    axios.get(`${backendUrl}/auth/assets`, {
       headers: { Authorization: `Bearer ${token}` }, // ✅ Attach Token
     })
-    .then((response) => {
-      if (response.data.Status) {
-        console.log("✅ Assets Fetched:", response.data.Result); // Debugging
-        setAssets(response.data.Result);
-        setFilteredAssets(response.data.Result); // ✅ Ensure filteredAssets is updated
-      } else {
-        console.error("❌ Failed to fetch assets");
-      }
-    })
-    .catch((err) => console.error("❌ Error fetching assets:", err));
+      .then((response) => {
+        if (response.data.Status) {
+          console.log("✅ Assets Fetched:", response.data.Result); // Debugging
+          setAssets(response.data.Result);
+          setFilteredAssets(response.data.Result); // ✅ Ensure filteredAssets is updated
+        } else {
+          console.error("❌ Failed to fetch assets");
+        }
+      })
+      .catch((err) => console.error("❌ Error fetching assets:", err));
   };
-  
-  
+
+
+
 
   // Filter "My Assets" based on logged-in user's email
   useEffect(() => {
@@ -79,16 +84,16 @@ const AssetRequests = () => {
       alert("User not found! Please log in again.");
       return;
     }
-  
+
     const requestData = {
       asset_name: asset.asset_name,
       liable_person: asset.liable_person,
     };
-  
+
     const token = localStorage.getItem("token"); // ✅ Fetch stored token
-  
+
     axios
-      .post("http://localhost:3002/auth/request_asset", requestData, {
+      .post(`${backendUrl}/auth/request_asset`, requestData, {
         headers: { Authorization: `Bearer ${token}` }, // ✅ Attach Token
       })
       .then((response) => {
@@ -100,7 +105,7 @@ const AssetRequests = () => {
       })
       .catch((err) => console.error("❌ Error sending asset request:", err));
   };
-  
+
 
   return (
     <div className="container mt-4">

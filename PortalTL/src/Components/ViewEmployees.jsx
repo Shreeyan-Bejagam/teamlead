@@ -7,23 +7,23 @@ const ViewEmployee = () => {
   const [employee, setEmployee] = useState({});
   const [teams, setTeams] = useState([]);
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     axios
-  .get(`http://localhost:3002/employee/detail/${id}`, { withCredentials: true }) 
-  .then((result) => {
-    console.log("✅ Employee Details Fetched:", result.data);
-    if (result.data.Status) {
-      setEmployee(result.data.Result || {});
-    } else {
-      alert(result.data.Error || "Failed to fetch employee details.");
-    }
-  })
-  .catch((err) => console.error("❌ Error fetching employee details:", err));
-
+      .get(`${backendUrl}/employee/detail/${id}`, { withCredentials: true })
+      .then((result) => {
+        console.log("✅ Employee Details Fetched:", result.data);
+        if (result.data.Status) {
+          setEmployee(result.data.Result || {});
+        } else {
+          alert(result.data.Error || "Failed to fetch employee details.");
+        }
+      })
+      .catch((err) => console.error("❌ Error fetching employee details:", err));
 
     axios
-      .get(`http://localhost:3002/employee/teams/${id}`, { withCredentials: true })
+      .get(`${backendUrl}/employee/teams/${id}`, { withCredentials: true })
       .then((result) => {
         console.log("✅ Employee Teams Fetched:", result.data);
         if (result.data.Status) {
@@ -62,28 +62,29 @@ const ViewEmployee = () => {
           )}
         </div>
 
-          <div className="mb-3">
+        <div className="mb-3">
           <strong>Profile Image:</strong>
           {employee.image ? (
             <img
-              src={`http://localhost:3002/Images/${employee.image}`} // ✅ Updated Image Path
+              src={`${backendUrl}/Images/${employee.image}`}
               alt="Profile"
               className="img-thumbnail d-block mt-2"
               style={{ width: "100px", height: "100px" }}
             />
+
           ) : "N/A"}
         </div>
 
         <div className="mb-3"><strong>Resume:</strong> {employee.resume ? (
-          <a href={`http://localhost:3002/Images/${employee.resume}`} download>Download Resume</a>) : "N/A"}</div>
+          <a href={`${backendUrl}/Images/${employee.resume}`} download>Download Resume</a>) : "N/A"}</div>
         <div className="mb-3"><strong>10th Memo:</strong> {employee.tenth_memo ? (
-          <a href={`http://localhost:3002/Images/${employee.tenth_memo}`} download>Download 10th Memo</a>) : "N/A"}</div>
+          <a href={`${backendUrl}/Images/${employee.tenth_memo}`} download>Download 10th Memo</a>) : "N/A"}</div>
         <div className="mb-3"><strong>Inter Memo:</strong> {employee.inter_memo ? (
-          <a href={`http://localhost:3002/Images/${employee.inter_memo}`} download>Download Inter Memo</a>) : "N/A"}</div>
+          <a href={`${backendUrl}/Images/${employee.inter_memo}`} download>Download Inter Memo</a>) : "N/A"}</div>
         <div className="mb-3"><strong>Aadhar:</strong> {employee.aadhar ? (
-          <a href={`http://localhost:3002/Images/${employee.aadhar}`} download>Download Aadhar</a>) : "N/A"}</div>
+          <a href={`${backendUrl}/Images/${employee.aadhar}`} download>Download Aadhar</a>) : "N/A"}</div>
         <div className="mb-3"><strong>PAN:</strong> {employee.pan ? (
-          <a href={`http://localhost:3002/Images/${employee.pan}`} download>Download PAN</a>) : "N/A"}</div>
+          <a href={`${backendUrl}/Images/${employee.pan}`} download>Download PAN</a>) : "N/A"}</div>
 
         <div className="text-center">
           <button className="btn btn-secondary" onClick={() => navigate("/dashboard/employees")}>Back</button>

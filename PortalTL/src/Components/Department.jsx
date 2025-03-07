@@ -6,9 +6,10 @@ const Department = () => {
   const [departments, setDepartments] = useState([]);
   const [teams, setTeams] = useState([]);
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
-    axios.get("http://localhost:3002/departments", { withCredentials: true }) // ✅ Send credentials
+    axios.get(`${backendUrl}/departments`, { withCredentials: true })
       .then((res) => {
         if (res.data.Status) {
           setDepartments(res.data.Result);
@@ -18,7 +19,7 @@ const Department = () => {
       })
       .catch((err) => console.error("❌ Error fetching departments:", err));
 
-    axios.get("http://localhost:3002/teams", { withCredentials: true }) // ✅ Send credentials
+    axios.get(`${backendUrl}/teams`, { withCredentials: true })
       .then((res) => {
         if (res.data.Status) {
           setTeams(res.data.Result);
@@ -27,12 +28,12 @@ const Department = () => {
         }
       })
       .catch((err) => console.error("❌ Error fetching teams:", err));
-  }, []); // ✅ Runs only once when the component mounts
+  }, []);// ✅ Runs only once when the component mounts
 
   return (
     <div className="container mt-3">
       <h3 className="text-center">Department List</h3>
-      
+
       <table className="table">
         <thead>
           <tr>

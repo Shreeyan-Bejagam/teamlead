@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 const Notifications = ({ teamLeadEmail }) => {
   const [notifications, setNotifications] = useState([]);
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     if (!teamLeadEmail) return; // Stop if no email
 
     axios
-      .get(`http://localhost:3002/auth/notifications/${teamLeadEmail}`)
+      .get(`${backendUrl}/auth/notifications/${teamLeadEmail}`)
       .then((response) => {
         if (response.data.Status) {
           setNotifications(response.data.Result);
@@ -22,7 +23,7 @@ const Notifications = ({ teamLeadEmail }) => {
   // 🔹 Handle Notification Click
   const handleNotificationClick = (notificationId, requestId) => {
     // Step 1: Mark notification as read
-    axios.put(`http://localhost:3002/auth/notifications/mark-read/${notificationId}`)
+    axios.put(`${backendUrl}/auth/notifications/mark-read/${notificationId}`)
       .then((response) => {
         if (response.data.Status) {
           // Step 2: Redirect to Asset Request Details Page

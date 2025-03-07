@@ -35,11 +35,11 @@ const AddAsset = () => {
     }
 
     axios
-      .post("http://localhost:3002/auth/add_asset", newAsset)
+      .post(`${backendUrl}/auth/add_asset`, newAsset)  // ✅ Use dynamic URL
       .then((response) => {
         if (response.data.Status) {
           alert("✅ Asset added successfully!");
-          navigate("/dashboard/assets"); // Redirect back to Assets page
+          navigate("/dashboard/assets");  // Redirect back to Assets page
         } else {
           alert("❌ Error adding asset!");
         }
@@ -49,6 +49,7 @@ const AddAsset = () => {
         alert("❌ An unexpected error occurred.");
       });
   };
+
 
   return (
     <div className="container mt-4">

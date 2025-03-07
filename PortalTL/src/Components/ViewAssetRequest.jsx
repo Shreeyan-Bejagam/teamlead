@@ -7,9 +7,10 @@ const ViewAssetRequest = () => {
   const [request, setRequest] = useState(null);
   const [status, setStatus] = useState("Pending");
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
-    axios.get(`http://localhost:3002/auth/asset_requests/${id}`)
+    axios.get(`${backendUrl}/auth/asset_requests/${id}`)
       .then(response => {
         if (response.data.Status) {
           setRequest(response.data.Result);
@@ -20,7 +21,7 @@ const ViewAssetRequest = () => {
   }, [id]);
 
   const handleUpdateStatus = (newStatus) => {
-    axios.post(`http://localhost:3002/auth/update_request/${id}`, { status: newStatus })
+    axios.post(`${backendUrl}/auth/update_request/${id}`, { status: newStatus })
       .then(response => {
         if (response.data.Status) {
           alert("Request updated successfully!");

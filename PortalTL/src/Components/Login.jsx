@@ -18,11 +18,11 @@ const Login = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log("🔍 Sending Request to:", `${backendUrl}/employee/teamleadlogin`);
-            const response = await axios.post(`${backendUrl}/employee/teamleadlogin`, values);
-
+            console.log("🔍 Sending Request to:", `${backendUrl}/auth/teamleadlogin`);
+            const response = await axios.post(`${backendUrl}/auth/teamleadlogin`, values);
+    
             console.log("✅ Server Response:", response.data);
-
+    
             if (response.data.loginStatus) {
                 localStorage.setItem("teamLeadId", response.data.id);  // ✅ Store TeamLead ID
                 navigate("/dashboard"); // ✅ Redirect to Dashboard
@@ -33,7 +33,7 @@ const Login = () => {
             console.error("❌ API Call Error:", err);
             setError("Login failed. Please check your credentials.");
         }
-    };
+    };    
 
     return (
         <div className='d-flex justify-content-center align-items-center vh-100 loginPage'>

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const TeamLeadIndentForm = () => {
     const { indentId } = useParams();
     const navigate = useNavigate();
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     const [step, setStep] = useState(1);  // Page 1 or Page 2
     const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const TeamLeadIndentForm = () => {
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:3002/auth/get_indent/${indentId}`)
+        axios.get(`${backendUrl}/auth/get_indent/${indentId}`)
             .then(response => {
                 if (response.data.Status) {
                     const indent = response.data.Indent;
@@ -40,18 +41,14 @@ const TeamLeadIndentForm = () => {
                 alert("Error loading indent");
             });
     }, [indentId, navigate]);
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
+    
     const handleSubmit = () => {
         if (!formData.justification_of_procurement.trim()) {
             alert("Justification of Procurement is mandatory.");
             return;
         }
-
-        axios.post("http://localhost:3002/auth/teamlead_update_indent", {
+    
+        axios.post(`${backendUrl}/auth/teamlead_update_indent`, {
             ...formData,
             indent_id: indentId
         }).then(() => {
@@ -61,7 +58,7 @@ const TeamLeadIndentForm = () => {
             console.error("Submit Error:", err);
             alert("Failed to submit indent.");
         });
-    };
+    };    
 
     return (
         <div className="container mt-4">

@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 const Employees = () => {
     const [employees, setEmployees] = useState([]);
     const navigate = useNavigate();
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;  // ✅ Correctly get backend URL
 
     useEffect(() => {
         axios
-            .get("http://localhost:3002/employee/", { withCredentials: true }) // ✅ Ensures cookies are sent
+            .get(`${backendUrl}/employee/`, { withCredentials: true })
             .then((result) => {
-                console.log("✅ Employee Data Fetched:", result.data); 
+                console.log("✅ Employee Data Fetched:", result.data);
                 if (result.data.Status) {
                     setEmployees(result.data.Result);
                 } else {
@@ -43,11 +44,12 @@ const Employees = () => {
                                 <td>{e.name}</td>
                                 <td>
                                     <img
-                                        src={`http://localhost:3000/Images/${e.image}`}
+                                        src={`${backendUrl}/Images/${e.image}`}
                                         className="employee_image"
                                         alt={e.name}
                                         style={{ width: "50px", height: "50px", borderRadius: "50%" }}
                                     />
+
                                 </td>
                                 <td>{e.email}</td>
                                 <td>{e.department_name ? e.department_name : "N/A"}</td>
