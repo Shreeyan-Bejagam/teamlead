@@ -14,6 +14,8 @@ const Login = () => {
 
     // ✅ Use environment variable (works locally & on Netlify)
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    console.log("🔍 Current Backend URL:", backendUrl);
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
